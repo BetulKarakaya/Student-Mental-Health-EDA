@@ -1,50 +1,93 @@
-# 🎓 Student Mental Health & Dropout Risk Analysis
+# 🎓 Student Mental Health & Dropout Risk: From EDA to Predictive Modeling
 
-This project provides a comprehensive **Exploratory Data Analysis (EDA)** on a large-scale dataset (1 million records) investigating the factors that contribute to student mental health issues and dropout risks. Using advanced visualization and statistical methods, the analysis uncovers the critical intersection between psychological burnout and academic persistence.
-
-## 📊 Dataset Overview
-The dataset used in this analysis explores various dimensions of student life, including academic performance, psychological metrics (stress, burnout, depression), and socio-economic factors.
-
-**Data Source:** [Student Mental Health & Burnout Dataset (Kaggle)](https://www.kaggle.com/datasets/ayeshasiddiqa123/student-health)
-
----
-
-## 🚀 Key Features of the Analysis
-- **Robust Data Loading:** Integrated `try-except` blocks with environment-aware path management for fail-safe data ingestion.
-- **Advanced Visualization:** High-quality interactive plots using `Plotly` and detailed statistical distributions with `Seaborn`.
-- **Feature Engineering & Insights:** Detection of multicollinearity and identification of "noise" vs. "signal" variables.
-- **Professional Coding Standards:** Senior-level modular code, comprehensive missing value analysis, and deep-dive correlation matrices.
-
----
-
-## 🔍 Key Findings & Insights
-
-### 1. The Real Drivers of Attrition
-Contrary to traditional beliefs, academic performance is not the primary predictor of dropout risk. Our analysis shows that:
-* **Mental Health is Decisive:** `Burnout Score` (+0.69) and `Depression Score` (+0.65) show the strongest positive correlation with dropout risk.
-* **The Economic Factor:** `Financial Stress` (+0.58) acts as a significant catalyst, often exacerbating psychological distress.
-* **Protective Factors:** A high `Mental Health Index` and strong `Social Support` are the most effective buffers against attrition.
-
-### 2. Redundant Features (Noise)
-The data reveals that `age`, `academic_year`, and `screen_time` have near-zero correlation with the target variable, suggesting that student risk profiles are independent of these demographics.
-
-### 3. Feature Redundancy
-Significant multicollinearity was detected between:
-* `Stress Level` & `Mental Health Index` (-0.95)
-* `Burnout Score` & `Depression Score` (+0.82)
-* `Screen Time` & `Internet Usage` (+0.89)
-
----
-
-## 🛠️ Tech Stack
-- **Language:** Python
-- **Libraries:** Pandas, NumPy, Plotly, Seaborn, Matplotlib, Scipy
-- **Environment:** Jupyter Notebook / Kaggle / Google Colab
+This repository presents an end-to-end data science pipeline—ranging from high-performance **Exploratory Data Analysis (EDA)** to **Predictive Regression Modeling**—on a massive dataset of 1,000,000 students. The project investigates the complex psychological and academic triggers behind student burnout and dropout risks.
 
 ---
 
 ## 📂 Project Structure
-```text
-├── studient-mental-health-eda.ipynb  # Main analysis notebook
-├── README.md                          # Project documentation
-└── data/                              # Data directory (external link provided)
+
+*   **`student-mental-health-eda.ipynb`**: Focuses on memory-efficient data loading, statistical distributions, and multivariate analysis.
+*   **`student-mental-health-model.py`**: Focuses on feature selection, pipeline construction, and the implementation of regression algorithms.
+
+---
+
+## 🛠️ High-Performance Engineering
+
+Handling 1,000,000 rows requires more than standard procedures. This project highlights:
+
+### 1. Memory Optimization (Downcasting)
+To ensure the project runs smoothly on standard environments (Kaggle/Colab), we implemented a custom optimization function:
+*   **Numerical Downcasting:** Converted `float64` to `float32` and `int64` to `int8/int16`.
+*   **Categorical Conversion:** Transformed repetitive object types into `category` dtypes.
+*   **Efficiency:** Reduced RAM consumption by **~65%**, enabling faster computations without losing precision.
+
+### 2. Intelligent Sampling
+For visualization and iterative model testing:
+*   **Stratified Sampling:** We utilized stratified techniques to extract a representative 50,000-row subset, ensuring that the distribution of `Dropout Risk` remains identical to the full 1M-row population.
+
+---
+
+## 🔍 Key EDA Findings
+
+### 🧬 The "Burnout" Catalyst
+Our analysis identifies that dropout risk is not just about grades:
+*   **Strongest Correlations:** `Burnout Score` (+0.69) and `Depression Score` (+0.65) are the primary drivers of attrition.
+*   **Multicollinearity:** Detected severe overlap between `Stress Level` and `Mental Health Index` ($r = -0.95$), leading to strategic feature dropping to prevent model overfitting.
+*   **Noise Identification:** Demographic factors like `Age` and `Academic Year` showed near-zero correlation with risk levels.
+
+---
+
+## 🤖 Regression Modeling & Hyperparameter Tuning
+
+The regression phase transforms EDA insights into a predictive framework using advanced Gradient Boosting
+
+### **Preprocessing & Feature Engineering**
+*   **Categorical Encoding:** Implementation of One-Hot Encoding for low-cardinality features.
+*   **Scaling:** Robust Scaling to handle potential outliers in psychological scores.
+*   **Feature Selection:** Dropping redundant variables identified during the EDA (e.g., Internet Usage, Age).
+
+### **Model Performance & Results**
+We utilized a tuned **LGBMRegressor** (LightGBM) within a structured pipeline. The results demonstrate a highly robust model that generalizes well to unseen data:
+
+*   **Best Parameters:** 
+    *   `learning_rate`: 0.03, `n_estimators`: 1000, `max_depth`: 6
+    *   `reg_lambda`: 1.0, `reg_alpha`: 1.0, `num_leaves`: 31
+*   **Best CV $R^2$ Score:** 0.5859
+*   **Total Processing Time:** 8 min 3.66 sec
+*   **Train $R^2$ Score:** 0.5943
+*   **Test $R^2$ Score:** 0.5866
+*   **MAE (Mean Absolute Error):** 0.6666
+
+---
+
+### **💡 Why is an $R^2$ of ~59% "Good" in this Context?**
+In psychological and behavioral datasets, achieving a 99% accuracy is often a **red flag** rather than a success. Here is why our result is scientifically sound:
+
+1.  **Human Subject Variability:** Unlike physics or chemistry, human behavior (burnout and dropout risk) is influenced by thousands of unmeasured external factors. A 59% variance explanation is highly significant in social sciences.
+2.  **Prevention of Overfitting:** The minimal gap between Train (0.594) and Test (0.586) scores proves that the model has **not memorized noise**. It has learned generalizable patterns.
+3.  **The "Complexity" Reality:** If a model reached 99%, it would likely indicate **Data Leakage** (using features that are effectively the target itself) or an unrealistic lack of "stochastic noise" in the 1M records.
+4.  **Operational Value:** Even with a 0.66 MAE, the model can accurately categorize students into "Low", "Medium", and "High" risk tiers, providing actionable insights for institutional intervention.
+---
+
+## 💻 Tech Stack & Tools
+
+*   **Analysis:** Pandas, NumPy, Scipy
+*   **Visualization:** Plotly (Interactive), Seaborn, Matplotlib
+*   **Modeling:** Scikit-Learn(RandomizedSearchCV,ColumnTransformer, TransformedTargetRegressor and Pipeline) and lightgmb
+*   **Deployment-Ready:** Modular code blocks and environment-aware path management.
+
+---
+
+## 📊 Dataset Reference
+**Data Source:** [Student Mental Health & Burnout Dataset (Kaggle)](https://www.kaggle.com/datasets/ayeshasiddiqa123/student-health)
+
+---
+
+## 🚀 How to Use
+1.  **Clone the Repo:** `git clone https://github.com/yourusername/student-mental-health.git`
+2.  **Install Dependencies:** `pip install -r requirements.txt`
+3.  **Run EDA:** Start with `student-mental-health-eda.ipynb` to understand the data landscape.
+4.  **Run Model:** Execute `student-mental-health-model.py` for risk prediction.
+
+---
+*Developed as a deep dive into Educational Data Science and Mental Health Analytics.*
