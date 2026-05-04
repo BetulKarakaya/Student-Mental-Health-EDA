@@ -84,10 +84,8 @@ In psychological and behavioral datasets, achieving a 99% accuracy is often a **
 ---
 
 ## 🚀 How to Use
-1.  **Clone the Repo:** `git clone https://github.com/yourusername/student-mental-health.git`
+1.  **Clone the Repo:** `git clone https://github.com/BetulKarakaya/Student-Mental-Health-Regression.git`
 2.  **Install Dependencies:** `pip install -r requirements.txt`
 3.  **Run EDA:** Start with `student-mental-health-eda.ipynb` to understand the data landscape.
 4.  **Run Model:** Execute `student-mental-health-model.py` for risk prediction.
 
----
-*Developed as a deep dive into Educational Data Science and Mental Health Analytics.*
